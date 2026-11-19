@@ -9,6 +9,7 @@ import {
 import { SymbolView } from 'expo-symbols';
 import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
 
+import { useAuth } from '@/auth';
 import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
 
 import { ExternalLink } from './external-link';
@@ -16,17 +17,29 @@ import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 export default function AppTabs() {
+  const { token } = useAuth();
+
   return (
     <Tabs>
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
         <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
+          <TabTrigger name="home" href="/home" asChild>
             <TabButton>Home</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+          <TabTrigger name="feed" href="/feed" asChild>
+            <TabButton>Feed</TabButton>
           </TabTrigger>
+          {/* Profile while logged in, Login while logged out */}
+          {token ? (
+            <TabTrigger name="profile" href="/profile" asChild>
+              <TabButton>Profile</TabButton>
+            </TabTrigger>
+          ) : (
+            <TabTrigger name="login" href="/login" asChild>
+              <TabButton>Login</TabButton>
+            </TabTrigger>
+          )}
         </CustomTabList>
       </TabList>
     </Tabs>
